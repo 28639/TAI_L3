@@ -1,68 +1,214 @@
-let questions =
-    [
-        {
-            number: 1,
-            question:'1. Jakiego typu grą jest Call of Duty?',
-            answers: ['FPS','MMOPRG','Zręcznościowa','Logiczna'],
-            correct_answer:'FPS'
-        },
-        {
-            number: 2,
-            question:'2. Jakiego koloru jest niebieski maluch?',
-            answers: ['Niebieskiego', 'Czerwonego','Żółtego','Czarnego'],
-            correct_answer:'Niebieskiego'
-        },
-        {
-            number: 3,
-            question:'3. Jaka jest prędkość światła?',
-            answers:['Nie wiem', '123 456 7 kmh','300 000 kmsek','90kmh'],
-            correct_answer:'300 000 kmsek'
-        },
 
+(function() {
+    const myQuestions = [
         {
-            number:4,
-            question:'4. Ziemia jest?',
-            answers:['Kulą','Płaska','Elipsoidą','Prostokątem'],
-            correct_answer:'Elipsoidą'
+            question: " Jakiego typu grą jest Call of Duty? ",
+            answers: {
+                a: "FPS",
+                b: "MMOPRG",
+                c: "Zręcznościowa",
+                d: "logiczna"
+            },
+            correctAnswer: "a"
         },
         {
-            number: 5,
-            question:'5. Modelem mercedessa jest?',
-            answers:['W123','E12','A5','WD40'],
-            correct_answer:'W123'
+            question: "Jakiego koloru jest niebieski maluch ?",
+            answers: {
+                a: "niebeiski ",
+                b: "czerwony",
+                c: "nie wiem jak wygląda kosmita",
+                d: "różowy"
+            },
+            correctAnswer: "a"
         },
         {
-            number:6,
-            question:'6. Top Gun to film...?',
-            answers:['Sensacyjny','Dramat','Komedia','Wojenny'],
-            correct_answer:'Sensacyjny'
+            question: "w znanej piosence Krzysztow Krawczyk chciałby być :",
+            answers: {
+                a: "wędkarzem",
+                b: "prywaciarzem",
+                c: "marynarzem",
+                d: "kobieciarzem"
+            },
+            correctAnswer: "c"
         },
         {
-            number:7,
-            question:'7. Stolica Australii jest...?',
-            answers:['Melbourne','Canberra','Sydney','Delhi'],
-            correct_answer:'Canberra'
+            question: "Kto kłamie",
+            answers: {
+                a: "facebook",
+                b: "google",
+                c: "wszyscy ",
+                d: "telewizja"
+            },
+            correctAnswer: "c"
         },
         {
-            number:8,
-            question:'8. Więcej niż jedno zwierze to?',
-            answers:['Lama','Okoń','Linijka','Wataha'],
-            correct_answer:'Wataha'
+            question: "Jak nazywają się słynne samochody Elona Muska",
+            answers: {
+                a: "Kojot",
+                b: "Hybryda",
+                c: "Insignia",
+                d: "Tesla"
+            },
+            correctAnswer: "b"
         },
         {
-            number:9,
-            question:'9. Co pływa po kanale weneckim?',
-            answers:['Gondola','Ponton','Galera','Żaglówka'],
-            correct_answer:'Gondola'
+            question: "Kto jest najlepszy?",
+            answers: {
+                a: "Lewandowski",
+                b: "Ronaldo",
+                c: "Misiek"
+            },
+            correctAnswer: "c"
         },
         {
-            number:10,
-            question:'10. Jak nazywa się tradycyjny napój Anglików pity po południu?',
-            answers:['Kawa','Mleko','Herbata','Sok'],
-            correct_answer:'Herbata'
+            question: "Które imie zaczyna się na Z",
+            answers: {
+                a: "TAK",
+                b: "Nie",
+                c: "Zofia"
+            },
+            correctAnswer: "c"
         },
-    ]
+        {
+            question: "Ile wynosi czas ładowanie strony w html?",
+            answers: {
+                a: "Nie wiem",
+                b: "Nie mam pojęcia",
+                c: "Testuje"
+            },
+            correctAnswer: "c"
+        },
+        {
+            question: "Ile masz lat jeżeli jesteś z 95 roku?",
+            answers: {
+                a: "23",
+                b: "22",
+                c: "100"
+            },
+            correctAnswer: "a"
+        },
+        {
+            question: "Ile trwają studia Karola M.",
+            answers: {
+                a: "3 lata",
+                b: "7 semestrów",
+                c: "10 misięcy",
+                d: "całe życie"
+            },
+            correctAnswer: "d"
+        }
+    ];
 
+    function buildQuiz() {
+        // we'll need a place to store the HTML output
+        const output = [];
 
-let button=document.querySelector('.next');
-button.addEventListener('click',function (evt) {  })
+        // for each question...
+        myQuestions.forEach((currentQuestion, questionNumber) => {
+            // we'll want to store the list of answer choices
+            const answers = [];
+
+            // and for each available answer...
+            for (letter in currentQuestion.answers) {
+                // ...add an HTML radio button
+                answers.push(
+                    `<label>
+             <input type="radio" name="question${questionNumber}" value="${letter}">
+              ${letter} :
+              ${currentQuestion.answers[letter]}
+           </label>`
+                );
+            }
+
+            // add this question and its answers to the output
+            output.push(
+                `<div class="slide">
+           <div class="question"> ${currentQuestion.question} </div>
+           <div class="answers"> ${answers.join("")} </div>
+         </div>`
+            );
+        });
+
+        // finally combine our output list into one string of HTML and put it on the page
+        quizContainer.innerHTML = output.join("");
+    }
+
+    function showResults() {
+        // gather answer containers from our quiz
+        const answerContainers = quizContainer.querySelectorAll(".answers");
+
+        // keep track of user's answers
+        let numCorrect = 0;
+
+        // for each question...
+        myQuestions.forEach((currentQuestion, questionNumber) => {
+            // find selected answer
+            const answerContainer = answerContainers[questionNumber];
+            const selector = `input[name=question${questionNumber}]:checked`;
+            const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+            // if answer is correct
+            if (userAnswer === currentQuestion.correctAnswer) {
+                // add to the number of correct answers
+                numCorrect++;
+
+                // color the answers green
+                answerContainers[questionNumber].style.color = "green";
+            } else {
+                // if answer is wrong or blank
+                // color the answers red
+                answerContainers[questionNumber].style.color = "yellow";
+            }
+        });
+
+        // show number of correct answers out of total
+        resultsContainer.innerHTML = `Gratuluje , Poprawne odpowiedzi to ${numCorrect} na ${myQuestions.length} możliwych do uzyskania`;
+    }
+
+    function showSlide(n) {
+        slides[currentSlide].classList.remove("active-slide");
+        slides[n].classList.add("active-slide");
+        currentSlide = n;
+
+        if (currentSlide === 0) {
+            previousButton.style.display = "none";
+        } else {
+            previousButton.style.display = "inline-block";
+        }
+
+        if (currentSlide === slides.length - 1) {
+            nextButton.style.display = "none";
+            submitButton.style.display = "inline-block";
+        } else {
+            nextButton.style.display = "inline-block";
+            submitButton.style.display = "none";
+        }
+    }
+
+    function showNextSlide() {
+        showSlide(currentSlide + 1);
+    }
+
+    function showPreviousSlide() {
+        showSlide(currentSlide - 1);
+    }
+
+    const quizContainer = document.getElementById("quiz");
+    const resultsContainer = document.getElementById("results");
+    const submitButton = document.getElementById("submit");
+
+    // display quiz right away
+    buildQuiz();
+
+    const previousButton = document.getElementById("previous");
+    const nextButton = document.getElementById("next");
+    const slides = document.querySelectorAll(".slide");
+    let currentSlide = 0;
+
+    showSlide(0);
+
+    // on submit, show results
+    submitButton.addEventListener("click", showResults);
+    previousButton.addEventListener("click", showPreviousSlide);
+    nextButton.addEventListener("click", showNextSlide);
+})();
